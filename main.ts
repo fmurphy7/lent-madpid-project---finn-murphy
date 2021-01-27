@@ -17,7 +17,6 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         .......cccccfbdbbfc.............
         .............fffff..............
         `, mySprite, 40, 0)
-    Bad_guys.destroy(effects.spray, 500)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     Bad_guys = sprites.create(img`
@@ -45,9 +44,15 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         ........................
         ........................
         ........................
-        `, SpriteKind.Player)
-    Bad_guys.follow(mySprite, 30)
+        `, SpriteKind.Enemy)
+    Bad_guys.follow(mySprite, 40)
     Bad_guys.setPosition(146, 75)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    Bad_guys.destroy(effects.spray, 500)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    game.over(false, effects.dissolve)
 })
 let Bad_guys: Sprite = null
 let projectile: Sprite = null
@@ -72,4 +77,4 @@ mySprite = sprites.create(img`
     `, SpriteKind.Player)
 scene.setBackgroundColor(9)
 controller.moveSprite(mySprite)
-mySprite.setBounceOnWall(true)
+mySprite.setStayInScreen(true)
