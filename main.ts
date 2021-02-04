@@ -1,3 +1,44 @@
+namespace SpriteKind {
+    export const Enemy2 = SpriteKind.create()
+    export const Enemy3 = SpriteKind.create()
+}
+sprites.onDestroyed(SpriteKind.Enemy3, function (sprite) {
+    Winning_burger = sprites.create(img`
+        ...........ccccc66666...........
+        ........ccc4444444444666........
+        ......cc444444444bb4444466......
+        .....cb4444bb4444b5b444444b.....
+        ....eb4444b5b44444b44444444b....
+        ...ebb44444b4444444444b444446...
+        ..eb6bb444444444bb444b5b444446..
+        ..e6bb5b44444444b5b444b44bb44e..
+        .e66b4b4444444444b4444444b5b44e.
+        .e6bb444444444444444444444bb44e.
+        eb66b44444bb444444444444444444be
+        eb66bb444b5b44444444bb44444444be
+        fb666b444bb444444444b5b4444444bf
+        fcb666b44444444444444bb444444bcf
+        .fbb6666b44444444444444444444bf.
+        .efbb66666bb4444444444444444bfe.
+        .86fcbb66666bbb44444444444bcc688
+        8772effcbbbbbbbbbbbbbbbbcfc22778
+        87722222cccccccccccccccc22226678
+        f866622222222222222222222276686f
+        fef866677766667777776667777fffef
+        fbff877768f86777777666776fffffbf
+        fbeffeefffeff7766688effeeeefeb6f
+        f6bfffeffeeeeeeeeeeeeefeeeeebb6e
+        f66ddfffffeeeffeffeeeeeffeedb46e
+        .c66ddd4effffffeeeeeffff4ddb46e.
+        .fc6b4dddddddddddddddddddb444ee.
+        ..ff6bb444444444444444444444ee..
+        ....ffbbbb4444444444444444ee....
+        ......ffebbbbbb44444444eee......
+        .........fffffffcccccee.........
+        ................................
+        `, SpriteKind.Food)
+    Winning_burger.setPosition(132, 41)
+})
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     projectile = sprites.createProjectileFromSprite(img`
         ...........fffcc....................
@@ -48,14 +89,84 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     Bad_guys.follow(mySprite, 40)
     Bad_guys.setPosition(146, 75)
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy3, function (sprite, otherSprite) {
+    My_enemy_3.destroy(effects.spray, 500)
+})
+sprites.onDestroyed(SpriteKind.Enemy2, function (sprite) {
+    game.showLongText("Level 3", DialogLayout.Bottom)
+    My_enemy_3 = sprites.create(img`
+        . . f f f . . . . . . . . . . . 
+        f f f c c . . . . . . . . f f f 
+        f f c c c . c c . . . f c b b c 
+        f f c 3 c c 3 c c f f b b b c . 
+        f f c 3 b c 3 b c f b b c c c . 
+        f c b b b b b b c f b c b c c . 
+        c c 1 b b b 1 b c b b c b b c . 
+        c b b b b b b b b b c c c b c . 
+        c b 1 f f 1 c b b c c c c c . . 
+        c f 1 f f 1 f b b b b f c . . . 
+        f f f f f f f b b b b f c . . . 
+        f f 2 2 2 2 f b b b b f c c . . 
+        . f 2 2 2 2 2 b b b c f . . . . 
+        . . f 2 2 2 b b b c f . . . . . 
+        . . . f f f f f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Enemy3)
+    My_enemy_3.follow(mySprite, 60)
+    My_enemy_3.setPosition(139, 45)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy2, function (sprite, otherSprite) {
+    My_enemy_2.destroy(effects.spray, 500)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy2, function (sprite, otherSprite) {
+    game.over(false)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    game.over(true)
+    game.showLongText("You Win!", DialogLayout.Bottom)
+})
+sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
+    game.showLongText("Level 2", DialogLayout.Bottom)
+    My_enemy_2 = sprites.create(img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ..........fffff.........
+        ........ff1111bff.......
+        .......fb1111111bf......
+        .......f111111111f......
+        ......fd1111111ffff.....
+        ......fd111dd1c111bf....
+        ......fb11fcdf1b1bff....
+        ......f11111bfbfbff.....
+        ......f1b1bdfcffff......
+        ......fbfbfcfcccf.......
+        ......ffffffffff........
+        .........ffffff.........
+        .........ffffff.........
+        .........fffffff..f.....
+        ..........fffffffff.....
+        ...........fffffff......
+        ........................
+        ........................
+        ........................
+        ........................
+        `, SpriteKind.Enemy2)
+    My_enemy_2.setPosition(131, 29)
+    My_enemy_2.follow(mySprite, 50)
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     Bad_guys.destroy(effects.spray, 500)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    game.over(false, effects.dissolve)
+    game.over(false)
 })
+let My_enemy_2: Sprite = null
+let My_enemy_3: Sprite = null
 let Bad_guys: Sprite = null
 let projectile: Sprite = null
+let Winning_burger: Sprite = null
 let mySprite: Sprite = null
 mySprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
@@ -78,3 +189,5 @@ mySprite = sprites.create(img`
 scene.setBackgroundColor(9)
 controller.moveSprite(mySprite)
 mySprite.setStayInScreen(true)
+tiles.setTilemap(tilemap`level1`)
+info.setLife(3)
